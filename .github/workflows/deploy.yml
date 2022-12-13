@@ -11,17 +11,20 @@ jobs:
   test:
     environment: testing
     runs-on: ubuntu-latest
-    container: 
-      image: node:16
+    # container: 
+    #   image: node:16
     env:
       MONGODB_CONNECTION_PROTOCOL: mongodb #mongodb+srv
-      MONGODB_CLUSTER_ADDRESS: mongodb # service's Label name can be used when job as well is running on container #cluster0.bg4gqyo.mongodb.net
+      # MONGODB_CLUSTER_ADDRESS: mongodb # service's Label name can be used when job as well is running in container #cluster0.bg4gqyo.mongodb.net
+      MONGODB_CLUSTER_ADDRESS: 127.0.0.1:27017 # when job is not running in container
       MONGODB_USERNAME: root #${{ secrets.MONGODB_USERNAME }}
       MONGODB_PASSWORD: example #${{ secrets.MONGODB_PASSWORD }}
       PORT: 8080
     services:
       mongodb: # Label name
         image: mongo
+        ports: # required when not running a job n container
+          - 27017:27017
         env: 
           MONGO_INITDB_ROOT_USERNAME: root
           MONGO_INITDB_ROOT_PASSWORD: example
